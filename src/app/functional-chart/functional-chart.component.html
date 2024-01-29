@@ -1,0 +1,20 @@
+<p-organizationChart [value]="data" selectionMode="single">
+  <ng-template let-node pTemplate="default">
+    <div class="p-2 text-center flex flex-column">
+      <p-button icon="pi pi-info" styleClass="p-button-sm" (click)="openDialog(node)"></p-button>
+      <img src="https://primefaces.org/cdn/primeng/images/flag/flag_placeholder.png" [alt]="node.label" [class]="'flag' + ' flag-' + node.data" width="32" />
+      <div>{{ node.data.name }}</div>
+      <div class="p-2">{{ node.label }}</div>
+    </div>
+  </ng-template>
+</p-organizationChart>
+
+<p-dialog [header]="header" [(visible)]="dialogVisible" [style]="{width: '50vw'}">
+  <p>
+    Załaduj jak największy ciężar i do odciny
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </p>
+  <iframe width="100%" src="https://www.youtube.com/embed/J_ekvFybels" frameborder="0" allowfullscreen></iframe>
+</p-dialog>

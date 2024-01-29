@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {RegionService} from "./services/region.service";
-import {IMusclesDiagDTO, IRegion, IValue} from "./model/diag";
-import {MenuItem, TreeNode} from "primeng/api";
-import {MuscleService} from "./services/muscle.service";
-import {iterator} from "rxjs/internal/symbol/iterator";
+import {IRegion, IValue} from "../model/diag";
+import {TreeNode} from "primeng/api";
+import {RegionService} from "../services/region.service";
+import {MuscleService} from "../services/muscle.service";
 
 interface IColumn {
   name: string;
@@ -11,16 +10,11 @@ interface IColumn {
 }
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: 'app-diagnose-tool',
+  templateUrl: './diagnose-tool.component.html',
+  styleUrls: ['./diagnose-tool.component.scss']
 })
-export class AppComponent implements OnInit{
-  items: MenuItem[] = [];
-
-  activeItem: MenuItem = this.items[0];
-
-  title = 'kb_diag_fe';
+export class DiagnoseToolComponent implements OnInit{
 
   originRegions: IRegion[] = [];
   regions: TreeNode[] = [];
@@ -30,16 +24,11 @@ export class AppComponent implements OnInit{
   diagClick: boolean = false;
   diagResult: IValue[] = [];
   columns: IColumn[] = [];
+
   constructor(private regionService: RegionService, private muscleService: MuscleService) {
   }
 
   ngOnInit(): void {
-    this.items = [
-      { label: 'Diagnose', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-      { label: 'Chart', icon: 'pi pi-fw pi-calendar', routerLink: ['/chart'] }
-    ];
-
-    this.activeItem = this.items[0];
     // let tmp;
     // if (localStorage) {
     //   tmp = localStorage.getItem("regions");
@@ -48,11 +37,11 @@ export class AppComponent implements OnInit{
     //   this.originRegions = JSON.parse(tmp);
     //   this.fillTree(this.originRegions);
     // } else {
-      this.regionService.getRegions().subscribe(e => {
-        // localStorage.setItem("regions", JSON.stringify(e));
-        this.originRegions = e;
-        this.fillTree(this.originRegions);
-      })
+    this.regionService.getRegions().subscribe(e => {
+      // localStorage.setItem("regions", JSON.stringify(e));
+      this.originRegions = e;
+      this.fillTree(this.originRegions);
+    })
     // }
   }
 
@@ -118,4 +107,5 @@ export class AppComponent implements OnInit{
       }
     )
   }
+
 }
