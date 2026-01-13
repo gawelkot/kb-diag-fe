@@ -23,7 +23,7 @@
                   <p-sortIcon field="name"></p-sortIcon></th>
                 <th pFrozenColumn pSortableColumn="score">Score
                   <p-sortIcon field="score"></p-sortIcon></th>
-                <th *ngFor="let col of columns" [pSortableColumn]="col.name">
+                <th *ngFor="let col of columns" [pSortableColumn]="col.name" class="selected-symptom">
                   {{col.regionNameAbbreviation}}/{{col.name}}
                   <p-sortIcon [field]="col.name"></p-sortIcon>
                 </th>
@@ -34,8 +34,8 @@
                 <td pFrozenColumn><span [pTooltip]="rowData.symptoms" [escape]=false>{{rowData.name}}</span></td>
                 <td pFrozenColumn>{{rowData.score}}</td>
                 <td *ngFor="let col of columns">
-                  <span *ngIf="rowData[col.name] == 'jest'"><i class="pi pi-check" style="color: green"></i></span>
-                  <span *ngIf="rowData[col.name] != 'jest'"><i class="pi pi-minus" style="color: red"></i></span>
+                  <span *ngIf="rowData[col.name]"><i class="pi pi-check symptom-match"></i></span>
+                  <span *ngIf="!rowData[col.name]"><i class="pi pi-times symptom-miss"></i></span>
                   <!--        {{rowData[col.name]}}-->
                 </td>
               </tr>
