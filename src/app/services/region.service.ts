@@ -13,7 +13,7 @@ export class RegionService {
 
   constructor (private http: HttpClient) {}
 
-  getRegions(): Observable<IRegion[]> {
-    return this.http.get<IRegion[]>(this.regionUrl);
-  }
+  // getRegions(): Observable<IRegion[]> {
+  //   return this.http.get<IRegion[]>(this.regionUrl);
+  // }
 }

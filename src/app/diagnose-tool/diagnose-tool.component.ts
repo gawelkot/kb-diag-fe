@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {IRegion, IValue} from "../model/diag";
+import {IMuscle, IRegion, ISymptom, IValue} from "../model/diag";
 import {TreeNode} from "primeng/api";
 import {RegionService} from "../services/region.service";
 import {MuscleService} from "../services/muscle.service";
+import {REGIONS} from "../model/regions.data";
 
 interface IColumn {
   name: string;
@@ -18,7 +19,7 @@ export class DiagnoseToolComponent implements OnInit{
 
   originRegions: IRegion[] = [];
   regions: TreeNode[] = [];
-  selectedNodes: TreeNode[] = [];
+  selectedNodes: TreeNode<ISymptom>[] = [];
   uiReady: boolean = false;
   tableReady: boolean = false;
   diagClick: boolean = false;
@@ -37,11 +38,12 @@ export class DiagnoseToolComponent implements OnInit{
     //   this.originRegions = JSON.parse(tmp);
     //   this.fillTree(this.originRegions);
     // } else {
-    this.regionService.getRegions().subscribe(e => {
-      // localStorage.setItem("regions", JSON.stringify(e));
-      this.originRegions = e;
-      this.fillTree(this.originRegions);
-    })
+    this.fillTree(REGIONS);
+    // this.regionService.getRegions().subscribe(e => {
+    //   // localStorage.setItem("regions", JSON.stringify(e));
+    //   this.originRegions = e;
+    //   this.fillTree(this.originRegions);
+    // })
     // }
   }
 
@@ -71,41 +73,63 @@ export class DiagnoseToolComponent implements OnInit{
     this.uiReady = true;
   }
 
+
   diagnose() {
-    this.diagClick = true;
-    this.tableReady = false;
-    this.columns = [];
+    // this.selectedNodes.forEach(e => console.log(e));
+    //find all muscles that casuse those symptoms
+    let muscles = new Set<IMuscle>;
+
+    this.selectedNodes.forEach(e => {
+      e.data?.muscles.forEach(m => muscles.add(m));
+    })
+
+    console.log(muscles);
+
     this.diagResult = [];
-    this.muscleService.getDiagnoseResult(this.selectedNodes.filter(e => !e.children || e.children.length == 0).map(e => e.data.id)).subscribe(
-      e => {
-        this.selectedNodes.forEach(e => {
-          if (!e.children || e.children.length == 0) {
-            // console.log(e);
-            this.columns.push({name: e.data.translateName, regionNameAbbreviation: e.parent?.parent?.data.abbreviation});
-          }
-        })
-        e.forEach( dto => {
-          // console.log(dto);
-          let obj = {} as IValue;
-          obj.name = dto.name;
-          obj.score = dto.score;
-          // obj.symptomsMap = dto.symptomsMap;
-          Object.assign(obj, dto.symptomsMap);
-          const map1 = new Map<string, string[]>(Object.entries(dto.symptoms));
-          obj.symptoms = ""
-          map1.forEach((v,k) => {
-            obj.symptoms = obj.symptoms + k + ":<br>"
-            map1.get(k)?.forEach(v => {
-              obj.symptoms = obj.symptoms + "-" + v + "<br>"
-            })
-            obj.symptoms += "<br>"
-          })
-          // console.log(obj);
-          this.diagResult.push(obj);
-        })
-        this.tableReady = true;
-      }
-    )
+    let obj = {} as IValue;
+    obj.name = REGIONS[0].types[0].symptoms[0].muscles[0].name;
+    obj.score = 3;
+    obj.symptoms = REGIONS[0].types[0].symptoms.map(e => e.name).join();
+    this.diagResult.push(obj);
+    this.tableReady = true;
+  }
+
+  diagnose2() {
+    // this.diagClick = true;
+    // this.tableReady = false;
+    // this.columns = [];
+    // this.diagResult = [];
+    //
+    // this.muscleService.getDiagnoseResult(this.selectedNodes.filter(e => !e.children || e.children.length == 0).map(e => e.data.id)).subscribe(
+    //   e => {
+    //     this.selectedNodes.forEach(e => {
+    //       if (!e.children || e.children.length == 0) {
+    //         // console.log(e);
+    //         this.columns.push({name: e.data.translateName, regionNameAbbreviation: e.parent?.parent?.data.abbreviation});
+    //       }
+    //     })
+    //     e.forEach( dto => {
+    //       // console.log(dto);
+    //       let obj = {} as IValue;
+    //       obj.name = dto.name;
+    //       obj.score = dto.score;
+    //       // obj.symptomsMap = dto.symptomsMap;
+    //       Object.assign(obj, dto.symptomsMap);
+    //       const map1 = new Map<string, string[]>(Object.entries(dto.symptoms));
+    //       obj.symptoms = ""
+    //       map1.forEach((v,k) => {
+    //         obj.symptoms = obj.symptoms + k + ":<br>"
+    //         map1.get(k)?.forEach(v => {
+    //           obj.symptoms = obj.symptoms + "-" + v + "<br>"
+    //         })
+    //         obj.symptoms += "<br>"
+    //       })
+    //       // console.log(obj);
+    //       this.diagResult.push(obj);
+    //     })
+    //     this.tableReady = true;
+    //   }
+    // )
   }
 
 }

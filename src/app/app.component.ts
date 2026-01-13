@@ -4,6 +4,7 @@ import {IMusclesDiagDTO, IRegion, IValue} from "./model/diag";
 import {MenuItem, TreeNode} from "primeng/api";
 import {MuscleService} from "./services/muscle.service";
 import {iterator} from "rxjs/internal/symbol/iterator";
+import {REGIONS} from "./model/regions.data";
 
 interface IColumn {
   name: string;
@@ -48,11 +49,12 @@ export class AppComponent implements OnInit{
     //   this.originRegions = JSON.parse(tmp);
     //   this.fillTree(this.originRegions);
     // } else {
-      this.regionService.getRegions().subscribe(e => {
-        // localStorage.setItem("regions", JSON.stringify(e));
-        this.originRegions = e;
-        this.fillTree(this.originRegions);
-      })
+    this.fillTree(REGIONS);
+      // this.regionService.getRegions().subscribe(e => {
+      //   // localStorage.setItem("regions", JSON.stringify(e));
+      //   this.originRegions = e;
+      //   this.fillTree(this.originRegions);
+      // })
     // }
   }
 
